@@ -1,0 +1,4 @@
+db:
+  dns: $env(DB_DNS)
+  user: $env(DB_USERNAME)
+  password: $env(DB_PASSWORD)

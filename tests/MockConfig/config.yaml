@@ -1,0 +1,6 @@
+path:
+  to:
+    string-variable: string
+    quoted-variable: "quoted"
+    int-variable: 12
+
