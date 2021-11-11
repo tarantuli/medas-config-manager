@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\ConfigManager;
 
 use Dotenv\Dotenv;
+use Medas\ConfigManager\Exceptions\EnvVariableNotFoundException;
 use Medas\Core\Directory;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\DataTree;
@@ -24,16 +25,20 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
         $this->values = new DataTree();
     }
 
-    public function readEnv(string $filePath): void
+    public function readEnv(string $filePath): self
     {
         $dotEnv = Dotenv::createImmutable($filePath);
         $dotEnv->load();
+
+        return $this;
     }
 
-    public function addDirectory(string $directory): void
+    public function addDirectory(string $directory): self
     {
         $this->directories[] = $directory;
         $this->loadConfigFiles($directory);
+
+        return $this;
     }
 
     private function loadConfigFiles(string $directory)
@@ -42,7 +47,7 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
 
         foreach ($files as $file) {
             $this->files[] = $file;
-            $this->values->setRecursively(Yaml::parseFile($file), $file);
+            $this->values->mergeArray(Yaml::parseFile($file), $file);
         }
     }
 
@@ -66,6 +71,10 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
     {
         if (preg_match_all('/\$env\((\w+)\)/', $value, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
+                if (!array_key_exists($match[1], $_ENV)) {
+                    throw new EnvVariableNotFoundException($match[1]);
+                }
+
                 $value = str_replace($match[0], $_ENV[$match[1]], $value);
             }
         }
@@ -76,5 +85,10 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
     public function hasValue(string $path): bool
     {
         return $this->values->has($path);
+    }
+
+    public function setDefaults(array $defaults): void
+    {
+
     }
 }
