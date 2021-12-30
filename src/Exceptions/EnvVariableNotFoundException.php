@@ -13,7 +13,7 @@ class EnvVariableNotFoundException extends BaseException
         parent::__construct($variableName);
     }
 
-    public function getPattern(): string
+    public function pattern(): string
     {
         return 'env variable "%s" not found';
     }
