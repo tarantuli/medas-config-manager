@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Medas\ConfigManager;
 
-use Medas\ServiceManager\Interfaces\Package;
+use Medas\FileSystem\FileSystemPackage;
+use Medas\ServiceManager\BasePackage;
 
-class ConfigManagerPackage implements Package
+class ConfigManagerPackage extends BasePackage
 {
     public function dependencies(): array
     {
-        return [];
+        return $this->dependenciesByClass([
+            FileSystemPackage::class,
+        ]);
     }
 
     public function sourceDirectory(): string

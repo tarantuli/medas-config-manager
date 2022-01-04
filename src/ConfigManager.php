@@ -6,7 +6,7 @@ namespace Medas\ConfigManager;
 
 use Dotenv\Dotenv;
 use Medas\ConfigManager\Exceptions\EnvVariableNotFoundException;
-use Medas\Core\Directory;
+use Medas\FileSystem\DirectoryManager;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\DataTree;
 use Symfony\Component\Yaml\Yaml;
@@ -20,7 +20,9 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
     private array $files = [];
     private DataTree $values;
 
-    public function __construct()
+    public function __construct(
+        private DirectoryManager $directoryManager,
+    )
     {
         $this->values = new DataTree();
     }
@@ -43,7 +45,7 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
 
     private function loadConfigFiles(string $directory)
     {
-        $files = Directory::recursiveFindByExtension($directory, 'yaml');
+        $files = $this->directoryManager->recursiveFindByExtension($directory, 'yaml');
 
         foreach ($files as $file) {
             $this->files[] = $file;
