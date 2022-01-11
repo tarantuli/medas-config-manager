@@ -13,14 +13,15 @@ class ConfigManagerTest extends TestCase
     public function testReadTypes(): void
     {
         $config = $this->getConfig();
+
         $this->assertEquals('string', $config->getValue('path.to.string-variable'));
         $this->assertEquals('quoted', $config->getValue('path.to.quoted-variable'));
-        $this->assertEquals(12, $config->getValue('path.to.int-variable'));
+
+        $this->assertEquals('int', get_debug_type($config->getValue('path.to.int-variable')));
     }
 
     private function getConfig(): ConfigManager
     {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return ServiceManager::get()->resolve(ConfigManager::class);
     }
 

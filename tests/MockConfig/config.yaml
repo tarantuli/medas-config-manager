@@ -3,4 +3,3 @@ path:
     string-variable: string
     quoted-variable: "quoted"
     int-variable: 12
-
