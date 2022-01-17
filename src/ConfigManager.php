@@ -22,7 +22,6 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
     public function __construct(
         private DirectoryManager $directoryManager,
         private EnvValueInserter $envValueInserter,
-        private OptionController $optionController,
     )
     {
         $this->values = new DataTree();
@@ -62,13 +61,6 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
     public function getFiles(): array
     {
         return $this->files;
-    }
-
-    public function getOptionValue(ConfigOption $option): mixed
-    {
-        $path = $this->optionController->getPath($option);
-
-        return $this->getValue($path);
     }
 
     public function getValue(string $path): mixed

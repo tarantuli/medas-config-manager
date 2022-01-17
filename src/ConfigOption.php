@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\ConfigManager;
 
-interface ConfigOption extends \Medas\ServiceManager\Interfaces\ConfigOption
+interface ConfigOption
 {
     public static function instance(): ConfigOption;
 
