@@ -4,14 +4,22 @@ declare(strict_types=1);
 
 namespace Medas\Test\MockUps;
 
+use Medas\ConfigManager\ConfigGroup;
 use Medas\ConfigManager\ConfigOption;
+use Medas\ServiceManager\AsSingleton;
 
 class MockConfigOption implements ConfigOption
 {
+    use AsSingleton;
 
-    public function path(): string
+    public function group(): ConfigGroup
     {
-        return 'config.mockups.use-test-variables';
+        return MockUpConfigGroup::instance();
+    }
+
+    public function name(): string
+    {
+        return 'mock-option';
     }
 
     public function description(): string

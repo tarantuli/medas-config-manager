@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\ConfigManager;
 
 use Dotenv\Dotenv;
-use Medas\ConfigManager\Exceptions\EnvVariableNotFoundException;
 use Medas\FileSystem\DirectoryManager;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\DataTree;
@@ -22,6 +21,8 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
 
     public function __construct(
         private DirectoryManager $directoryManager,
+        private EnvValueInserter $envValueInserter,
+        private OptionController $optionController,
     )
     {
         $this->values = new DataTree();
@@ -63,34 +64,21 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
         return $this->files;
     }
 
+    public function getOptionValue(ConfigOption $option): mixed
+    {
+        $path = $this->optionController->getPath($option);
+
+        return $this->getValue($path);
+    }
+
     public function getValue(string $path): mixed
     {
         $value = $this->values->get($path);
-        return is_string($value) ? $this->insertEnvValues($value) : $value;
-    }
-
-    private function insertEnvValues(string $value): string
-    {
-        if (preg_match_all('/\$env\((\w+)\)/', $value, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $match) {
-                if (!array_key_exists($match[1], $_ENV)) {
-                    throw new EnvVariableNotFoundException($match[1]);
-                }
-
-                $value = str_replace($match[0], $_ENV[$match[1]], $value);
-            }
-        }
-
-        return $value;
+        return is_string($value) ? $this->envValueInserter->insert($value) : $value;
     }
 
     public function hasValue(string $path): bool
     {
         return $this->values->has($path);
-    }
-
-    public function setDefaults(array $defaults): void
-    {
-
     }
 }

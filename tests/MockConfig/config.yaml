@@ -3,3 +3,7 @@ path:
     string-variable: string
     quoted-variable: "quoted"
     int-variable: 12
+
+mock-root:
+  mock-group:
+    mock-option: mock-value

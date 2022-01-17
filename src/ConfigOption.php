@@ -6,7 +6,9 @@ namespace Medas\ConfigManager;
 
 interface ConfigOption
 {
-    public function path(): string;
+    public function group(): ConfigGroup;
+
+    public function name(): string;
 
     public function description(): string;
 
