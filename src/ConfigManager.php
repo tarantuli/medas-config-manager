@@ -40,6 +40,10 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
 
     public function addDirectory(string $directory): self
     {
+        if (!file_exists($directory)) {
+            throw new  \Exception('directory ' . $directory . ' not found');
+        }
+
         $this->directories[] = $directory;
         $this->loadConfigFiles($directory);
 
