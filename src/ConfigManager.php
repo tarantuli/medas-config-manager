@@ -56,7 +56,7 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
 
         foreach ($files as $file) {
             $this->files[] = $file;
-            $this->values->mergeArray(Yaml::parseFile($file), $file);
+            $this->values->mergeArray(Yaml::parseFile($file) ?? [], $file);
         }
     }
 
