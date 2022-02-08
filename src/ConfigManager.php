@@ -72,17 +72,19 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
 
     public function getOptionValue(ConfigOption $option): mixed
     {
-        return $this->getValue($this->optionController->getPath($option));
+        $path = $this->optionController->getPath($option);
+
+        return $this->hasValue($path) ? $this->getValue($path) : $option->default();
+    }
+
+    public function hasValue(string $path): bool
+    {
+        return $this->values->has($path);
     }
 
     public function getValue(string $path): mixed
     {
         $value = $this->values->get($path);
         return is_string($value) ? $this->envValueInserter->insert($value) : $value;
-    }
-
-    public function hasValue(string $path): bool
-    {
-        return $this->values->has($path);
     }
 }
