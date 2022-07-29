@@ -7,8 +7,6 @@ namespace Medas\ConfigManager;
 use Dotenv\Dotenv;
 use Medas\FileSystem\DirectoryManager;
 use Medas\ServiceManager\Attributes\Service;
-use Medas\ServiceManager\ConfigOptions\ConfigOption;
-use Medas\ServiceManager\ConfigOptions\OptionController;
 use Medas\ServiceManager\DataTree;
 use Symfony\Component\Yaml\Yaml;
 
@@ -24,7 +22,6 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
     public function __construct(
         private DirectoryManager $directoryManager,
         private EnvValueInserter $envValueInserter,
-        private OptionController $optionController,
     )
     {
         $this->values = new DataTree();
@@ -68,13 +65,6 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
     public function getFiles(): array
     {
         return $this->files;
-    }
-
-    public function getOptionValue(ConfigOption $option): mixed
-    {
-        $path = $this->optionController->getPath($option);
-
-        return $this->hasValue($path) ? $this->getValue($path) : $option->default();
     }
 
     public function hasValue(string $path): bool
