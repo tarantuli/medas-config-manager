@@ -27,9 +27,9 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
         $this->values = new DataTree();
     }
 
-    public function readEnv(string $filePath): self
+    public function readEnv(string $filePath, string $name = null): self
     {
-        $dotEnv = Dotenv::createImmutable($filePath);
+        $dotEnv = Dotenv::createImmutable($filePath, $name);
         $dotEnv->load();
 
         return $this;
