@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Medas\ConfigManager;
 
 use Dotenv\Dotenv;
-use Medas\FileSystem\DirectoryManager;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\DataTree\DataTree;
+use Medas\ServiceManager\Mapping\FileFinder;
 use Symfony\Component\Yaml\Yaml;
 
 #[Service]
@@ -20,7 +20,7 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
     private DataTree $values;
 
     public function __construct(
-        private DirectoryManager $directoryManager,
+        private FileFinder       $fileFinder,
         private EnvValueInserter $envValueInserter,
     )
     {
@@ -49,7 +49,7 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
 
     private function loadConfigFiles(string $directory)
     {
-        $files = $this->directoryManager->recursiveFindByExtension($directory, 'yaml');
+        $files = $this->fileFinder->recursiveFindByExtension($directory, 'yaml');
 
         foreach ($files as $file) {
             $this->files[] = $file;

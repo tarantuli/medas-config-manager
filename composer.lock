@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b82416f5aaeaffc628b57247233d6f19",
+    "content-hash": "2caa4bbc756abf42eb66d55304ab8339",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -116,58 +116,17 @@
             "time": "2022-08-17T13:22:16+00:00"
         },
         {
-            "name": "morphp/medas-file-system",
-            "version": "dev-dev",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:tarantuli/medas-file-system.git",
-                "reference": "43862c2e4c4c678067474082ad1b26281756a3f5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-file-system/zipball/43862c2e4c4c678067474082ad1b26281756a3f5",
-                "reference": "43862c2e4c4c678067474082ad1b26281756a3f5",
-                "shasum": ""
-            },
-            "require": {
-                "morphp/medas-core": "dev-dev",
-                "morphp/medas-service-manager": "dev-dev"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Medas\\FileSystem\\": "src/",
-                    "Medas\\Test\\": "tests/"
-                }
-            },
-            "authors": [
-                {
-                    "name": "Patrick Morpey",
-                    "email": "patrick@morphp.nl"
-                }
-            ],
-            "description": "Medas file system",
-            "support": {
-                "source": "https://github.com/tarantuli/medas-file-system/tree/dev",
-                "issues": "https://github.com/tarantuli/medas-file-system/issues"
-            },
-            "time": "2022-03-03T14:13:15+00:00"
-        },
-        {
             "name": "morphp/medas-service-manager",
             "version": "dev-dev",
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-service-manager.git",
-                "reference": "74ef34585861cb8fef395e05d3c80a34659d0dcc"
+                "reference": "601715c008ee2861b568351a7f57f362c039cfcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/74ef34585861cb8fef395e05d3c80a34659d0dcc",
-                "reference": "74ef34585861cb8fef395e05d3c80a34659d0dcc",
+                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/601715c008ee2861b568351a7f57f362c039cfcc",
+                "reference": "601715c008ee2861b568351a7f57f362c039cfcc",
                 "shasum": ""
             },
             "require": {
@@ -200,7 +159,7 @@
                 "source": "https://github.com/tarantuli/medas-service-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-service-manager/issues"
             },
-            "time": "2022-08-22T10:17:01+00:00"
+            "time": "2022-08-22T10:31:15+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -3019,9 +2978,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "morphp/medas-core": 20,
-        "morphp/medas-service-manager": 20,
-        "morphp/medas-file-system": 20
+        "morphp/medas-service-manager": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
