@@ -7,7 +7,7 @@ namespace Medas\ConfigManager;
 use Dotenv\Dotenv;
 use Medas\FileSystem\DirectoryManager;
 use Medas\ServiceManager\Attributes\Service;
-use Medas\ServiceManager\DataTree;
+use Medas\ServiceManager\DataTree\DataTree;
 use Symfony\Component\Yaml\Yaml;
 
 #[Service]
