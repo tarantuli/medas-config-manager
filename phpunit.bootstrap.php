@@ -10,8 +10,6 @@ $sm = ServiceManager::get();
 
 $sm->addPackage(ConfigManagerPackage::instance());
 
-/** @var ConfigManager $config */
-$config = $sm->resolve(ConfigManager::class);
-
-$config->readEnv(__DIR__);
-$config->addDirectory(realpath(__DIR__.'/tests/MockConfig'));
+$sm->resolve(ConfigManager::class)
+    ->readEnv(__DIR__)
+    ->addDirectory(realpath(__DIR__ . '/tests/MockConfig'));
