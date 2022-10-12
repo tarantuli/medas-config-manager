@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection ALL */
 
 declare(strict_types=1);
 
@@ -20,8 +20,8 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
     private DataTree $values;
 
     public function __construct(
-        private FileFinder       $fileFinder,
-        private EnvValueInserter $envValueInserter,
+        private readonly FileFinder       $fileFinder,
+        private readonly EnvValueInserter $envValueInserter,
     )
     {
         $this->values = new DataTree();
@@ -30,7 +30,13 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
     public function readEnv(string $filePath, string $name = null): self
     {
         $dotEnv = Dotenv::createImmutable($filePath, $name);
-        $dotEnv->load();
+
+        try {
+            $dotEnv->load();
+        }
+        catch (\ErrorException $e) {
+            throw new \Exception($e->getMessage());
+        }
 
         return $this;
     }
