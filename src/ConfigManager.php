@@ -1,4 +1,4 @@
-<?php /** @noinspection ALL */
+<?php
 
 declare(strict_types=1);
 
@@ -6,6 +6,7 @@ namespace Medas\ConfigManager;
 
 use Dotenv\Dotenv;
 use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Cache\CacheManager;
 use Medas\ServiceManager\DataTree\DataTree;
 use Medas\ServiceManager\Mapping\FileFinder;
 use Symfony\Component\Yaml\Yaml;
@@ -13,27 +14,62 @@ use Symfony\Component\Yaml\Yaml;
 #[Service]
 class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
 {
+    const CACHE_KEY = 'ConfigManager::valuesAndEnv';
+
     /** @var string[] $directories */
     private array $directories = [];
+
     /** @var string[] $files */
     private array $files = [];
+
     private DataTree $values;
+
+    private bool $valuesWereCached = true;
 
     public function __construct(
         private readonly FileFinder       $fileFinder,
         private readonly EnvValueInserter $envValueInserter,
+        private readonly CacheManager     $cacheManager,
     )
     {
-        $this->values = new DataTree();
+        [$this->values, $env] = $this->cacheManager->get()->get(
+            self::CACHE_KEY,
+            fn() => $this->initializeValues()
+        );
+
+        $this->envValueInserter->setEnv($env);
+    }
+
+    private function initializeValues(): array
+    {
+        $this->valuesWereCached = false;
+
+        return [new DataTree(), $_ENV];
+    }
+
+    public function __destruct()
+    {
+        if (!$this->valuesWereCached) {
+            // Delete any residual cached values, and store the current, complete values
+            $cache = $this->cacheManager->get();
+            $cache->remove(self::CACHE_KEY);
+            $cache->get(self::CACHE_KEY, fn() => [$this->values, $_ENV]);
+        }
     }
 
     public function readEnv(string $filePath, string $name = null): self
     {
+        if ($this->valuesWereCached) {
+            return $this;
+        }
+
         $dotEnv = Dotenv::createImmutable($filePath, $name);
 
         try {
             $dotEnv->load();
+            $this->envValueInserter->setEnv($_ENV);
         }
+            /** @noinspection PhpRedundantCatchClauseInspection */
         catch (\ErrorException $e) {
             throw new \Exception($e->getMessage());
         }
@@ -43,6 +79,10 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
 
     public function addDirectory(string $directory): self
     {
+        if ($this->valuesWereCached) {
+            return $this;
+        }
+
         if (!file_exists($directory)) {
             throw new  \Exception('directory ' . $directory . ' not found');
         }
