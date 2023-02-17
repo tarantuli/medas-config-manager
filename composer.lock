@@ -167,12 +167,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-service-manager.git",
-                "reference": "01c50c85822099fab8ba750013728112655a64da"
+                "reference": "ace41d072124c1a7ace60153d3835ad99c7ed202"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/01c50c85822099fab8ba750013728112655a64da",
-                "reference": "01c50c85822099fab8ba750013728112655a64da",
+                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/ace41d072124c1a7ace60153d3835ad99c7ed202",
+                "reference": "ace41d072124c1a7ace60153d3835ad99c7ed202",
                 "shasum": ""
             },
             "require": {
@@ -206,7 +206,7 @@
                 "source": "https://github.com/tarantuli/medas-service-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-service-manager/issues"
             },
-            "time": "2023-02-16T09:01:20+00:00"
+            "time": "2023-02-17T10:41:18+00:00"
         },
         {
             "name": "phpoption/phpoption",

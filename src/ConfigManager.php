@@ -22,12 +22,12 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
     /** @var string[] $files */
     private array $files = [];
 
-    private DataTree $values;
+    private readonly DataTree $values;
 
     private bool $valuesWereCached = true;
+    private readonly FileFinder $fileFinder;
 
     public function __construct(
-        private readonly FileFinder       $fileFinder,
         private readonly EnvValueInserter $envValueInserter,
         private readonly CacheManager     $cacheManager,
     )
@@ -38,6 +38,7 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
         );
 
         $this->envValueInserter->setEnv($env);
+        $this->fileFinder = new FileFinder();
     }
 
     private function initializeValues(): array

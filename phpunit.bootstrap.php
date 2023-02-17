@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 use Medas\ConfigManager\ConfigManager;
 use Medas\ConfigManager\ConfigManagerPackage;
+use Medas\ServiceManager\ServiceConfig;
 use Medas\ServiceManager\ServiceManager;
 
-$sm = ServiceManager::get();
+new ServiceManager(function (): ServiceConfig {
+    $config = new ServiceConfig();
+    $config->addPackages([
+        ConfigManagerPackage::instance(),
+    ]);
 
-$sm->addPackage(ConfigManagerPackage::instance());
+    return $config;
+});
 
-$sm->resolve(ConfigManager::class)
+service(ConfigManager::class)
     ->readEnv(__DIR__)
     ->addDirectory(realpath(__DIR__ . '/tests/MockConfig'));
