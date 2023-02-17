@@ -6,7 +6,7 @@ namespace Medas\ConfigManager\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
-class EnvVariableNotFoundException extends BaseException
+class EnvVariableNotFound extends BaseException
 {
     public function __construct(string $variableName)
     {
