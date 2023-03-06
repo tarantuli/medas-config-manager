@@ -51,10 +51,8 @@ class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
     public function __destruct()
     {
         if (!$this->valuesWereCached) {
-            // Delete any residual cached values, and store the current, complete values
-            $cache = $this->cacheManager->get();
-            $cache->remove(self::CACHE_KEY);
-            $cache->get(self::CACHE_KEY, fn() => [$this->values, $_ENV]);
+            // Explicitly set the current values
+            $this->cacheManager->get()->set(self::CACHE_KEY, [$this->values, $_ENV]);
         }
     }
 
