@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Medas\ConfigManager;
 
 use Dotenv\Dotenv;
-use Medas\ServiceManager\Attributes\Service;
-use Medas\ServiceManager\Cache\CacheManager;
-use Medas\ServiceManager\DataTree\DataTree;
-use Medas\ServiceManager\Mapping\FileFinder;
+use Medas\ServiceManager\{Cache\CacheManager, DataTree\DataTree, Mapping\FileFinder, Service};
 use Symfony\Component\Yaml\Yaml;
 
 #[Service]
-class ConfigManager implements \Medas\ServiceManager\Interfaces\ConfigManager
+class ConfigManager implements \Medas\Core\Interfaces\ConfigManager
 {
     const CACHE_KEY = 'ConfigManager::valuesAndEnv';
 
