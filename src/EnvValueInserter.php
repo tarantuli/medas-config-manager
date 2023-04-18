@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\ConfigManager;
 
 use Medas\ConfigManager\Exceptions\EnvVariableNotFound;
-use Medas\ServiceManager\Service;
+use Medas\Core\Attributes\Service;
 
 #[Service]
 class EnvValueInserter

@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\ConfigManager;
 
-use Medas\ServiceManager\AsSingleton;
-use Medas\ServiceManager\BasePackage;
+use Medas\ServiceManager\{AsSingleton, BasePackage};
 
 class ConfigManagerPackage extends BasePackage
 {

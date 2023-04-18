@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Medas\ConfigManager;
 
 use Dotenv\Dotenv;
-use Medas\ServiceManager\{Cache\CacheManager, DataTree\DataTree, Mapping\FileFinder, Service};
+use Medas\Core\Attributes\Service;
+use Medas\ServiceManager\{Cache\CacheManager, DataTree\DataTree, Mapping\FileFinder};
 use Symfony\Component\Yaml\Yaml;
 
 #[Service]

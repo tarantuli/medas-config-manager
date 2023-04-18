@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\Test;
 
 use Medas\ConfigManager\ConfigManager;
-use Medas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 
 class ConfigManagerTest extends TestCase
@@ -22,7 +21,7 @@ class ConfigManagerTest extends TestCase
 
     private function getConfig(): ConfigManager
     {
-        return ServiceManager::get()->resolve(ConfigManager::class);
+        return service(ConfigManager::class);
     }
 
     public function testInsertEnvValues(): void
