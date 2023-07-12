@@ -90,7 +90,7 @@ class ConfigManager implements \Medas\Core\Interfaces\ConfigManager
         return $this;
     }
 
-    private function loadConfigFiles(string $directory)
+    private function loadConfigFiles(string $directory): void
     {
         $files = $this->fileFinder->recursiveFindByExtension($directory, 'yaml');
 
