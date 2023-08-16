@@ -26,7 +26,7 @@ class ConfigManager implements \Medas\Core\Interfaces\ConfigManager
     private readonly FileFinder $fileFinder;
 
     public function __construct(
-        private readonly EnvValueInserter $envValueInserter,
+        private readonly EnvValueReplacer $envValueReplacer,
         private readonly CacheManager     $cacheManager,
     )
     {
@@ -35,7 +35,7 @@ class ConfigManager implements \Medas\Core\Interfaces\ConfigManager
             fn() => $this->initializeValues()
         );
 
-        $this->envValueInserter->setEnv($env);
+        $this->envValueReplacer->setEnv($env);
         $this->fileFinder = new FileFinder();
     }
 
@@ -64,7 +64,7 @@ class ConfigManager implements \Medas\Core\Interfaces\ConfigManager
 
         try {
             $dotEnv->load();
-            $this->envValueInserter->setEnv($_ENV);
+            $this->envValueReplacer->setEnv($_ENV);
         }
             /** @noinspection PhpRedundantCatchClauseInspection */
         catch (\ErrorException $e) {
@@ -118,6 +118,6 @@ class ConfigManager implements \Medas\Core\Interfaces\ConfigManager
     public function getValue(string $path): mixed
     {
         $value = $this->values->get($path);
-        return is_string($value) ? $this->envValueInserter->insert($value) : $value;
+        return is_string($value) ? $this->envValueReplacer->process($value) : $value;
     }
 }

@@ -8,7 +8,7 @@ use Medas\ConfigManager\Exceptions\EnvVariableNotFound;
 use Medas\Core\Attributes\Service;
 
 #[Service]
-class EnvValueInserter
+class EnvValueReplacer
 {
     private array $env;
 
@@ -17,7 +17,7 @@ class EnvValueInserter
         $this->env = $env;
     }
 
-    public function insert(string $value): string|null
+    public function process(string $value): string|null
     {
         if (preg_match('/^\$env\((\w+)\)$/', $value, $match)) {
             // If the string as a whole refers to one ENV variable, and that one isn't set,
