@@ -120,4 +120,9 @@ class ConfigManager implements \Medas\Core\Interfaces\ConfigManager
         $value = $this->values->get($path);
         return is_string($value) ? $this->envValueReplacer->process($value) : $value;
     }
+
+    public function setValue(string $path, mixed $value): void
+    {
+        $this->values->set($path, $value);
+    }
 }
