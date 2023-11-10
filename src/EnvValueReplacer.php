@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Medas\ConfigManager;
 
-use Medas\ConfigManager\Exceptions\EnvVariableNotFound;
 use Medas\Core\Attributes\Service;
 
 #[Service]
@@ -28,7 +27,7 @@ class EnvValueReplacer
         if (preg_match_all('/\$env\((\w+)\)/', $value, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
                 if (!array_key_exists($match[1], $this->env)) {
-                    throw new EnvVariableNotFound($match[1]);
+                    throw new Exceptions\EnvVariableNotFound($match[1]);
                 }
 
                 $value = str_replace($match[0], $this->env[$match[1]], $value);

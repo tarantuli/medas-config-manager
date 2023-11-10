@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Medas\ConfigManager;
 
 use Dotenv\Dotenv;
-use Medas\Core\Attributes\Service;
+use Medas\Core\{Attributes\Service, Interfaces\ConfigManager as IntConfigManager};
 use Medas\ServiceManager\{Cache\CacheManager, DataTree\DataTree, Mapping\FileFinder};
 use Symfony\Component\Yaml\Yaml;
 
 #[Service]
-class ConfigManager implements \Medas\Core\Interfaces\ConfigManager
+class ConfigManager implements IntConfigManager
 {
     const CACHE_KEY = 'ConfigManager::valuesAndEnv';
 
@@ -19,9 +19,7 @@ class ConfigManager implements \Medas\Core\Interfaces\ConfigManager
 
     /** @var string[] $files */
     private array $files = [];
-
     private readonly DataTree $values;
-
     private bool $valuesWereCached = true;
     private readonly FileFinder $fileFinder;
 
@@ -30,12 +28,10 @@ class ConfigManager implements \Medas\Core\Interfaces\ConfigManager
         private readonly CacheManager     $cacheManager,
     )
     {
-        [$this->values, $env] = $this->cacheManager->get()->get(
-            self::CACHE_KEY,
-            fn() => $this->initializeValues()
-        );
+        [$this->values, $env] = $this->cacheManager->get()->get(self::CACHE_KEY, fn() => $this->initializeValues());
 
         $this->envValueReplacer->setEnv($env);
+
         $this->fileFinder = new FileFinder();
     }
 
@@ -66,7 +62,8 @@ class ConfigManager implements \Medas\Core\Interfaces\ConfigManager
             $dotEnv->load();
             $this->envValueReplacer->setEnv($_ENV);
         }
-            /** @noinspection PhpRedundantCatchClauseInspection */
+
+        /** @noinspection PhpRedundantCatchClauseInspection */
         catch (\ErrorException $e) {
             throw new \Exception($e->getMessage());
         }
@@ -85,6 +82,7 @@ class ConfigManager implements \Medas\Core\Interfaces\ConfigManager
         }
 
         $this->directories[] = $directory;
+
         $this->loadConfigFiles($directory);
 
         return $this;
@@ -96,6 +94,7 @@ class ConfigManager implements \Medas\Core\Interfaces\ConfigManager
 
         foreach ($files as $file) {
             $this->files[] = $file;
+
             $this->values->mergeArray(Yaml::parseFile($file) ?? [], $file);
         }
     }
@@ -118,6 +117,7 @@ class ConfigManager implements \Medas\Core\Interfaces\ConfigManager
     public function getValue(string $path): mixed
     {
         $value = $this->values->get($path);
+
         return is_string($value) ? $this->envValueReplacer->process($value) : $value;
     }
 
