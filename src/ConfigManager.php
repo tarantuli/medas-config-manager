@@ -60,6 +60,7 @@ class ConfigManager implements IntConfigManager
 
         try {
             $dotEnv->load();
+
             $this->envValueReplacer->setEnv($_ENV);
         }
 
@@ -78,7 +79,7 @@ class ConfigManager implements IntConfigManager
         }
 
         if (!file_exists($directory)) {
-            throw new  \Exception('directory ' . $directory . ' not found');
+            throw new \Exception('directory ' . $directory . ' not found');
         }
 
         $this->directories[] = $directory;
