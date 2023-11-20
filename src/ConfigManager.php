@@ -19,6 +19,7 @@ class ConfigManager implements IntConfigManager
 
     /** @var string[] $files */
     private array $files = [];
+
     private readonly DataTree $values;
     private bool $valuesWereCached = true;
     private readonly FileFinder $fileFinder;
