@@ -29,7 +29,10 @@ class ConfigManager implements IntConfigManager
         private readonly CacheManager     $cacheManager,
     )
     {
-        [$this->values, $env] = $this->cacheManager->get()->get(self::CACHE_KEY, fn() => $this->initializeValues());
+        [$this->values, $env] = $this->cacheManager->get()->get(
+            self::CACHE_KEY,
+            fn() => $this->initializeValues()
+        );
 
         $this->envValueReplacer->setEnv($env);
 
