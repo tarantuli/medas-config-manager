@@ -12,7 +12,7 @@ use Symfony\Component\Yaml\Yaml;
 #[Service]
 class ConfigManager implements IntConfigManager
 {
-    const CACHE_KEY = 'ConfigManager::valuesAndEnv';
+    private const CACHE_KEY = 'ConfigManager::valuesAndEnv';
 
     /** @var string[] $directories */
     private array $directories = [];
