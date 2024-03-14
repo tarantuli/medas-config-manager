@@ -23,18 +23,17 @@ class ConfigManager implements IntConfigManager
     private readonly DataTree $values;
     private bool $valuesWereCached = true;
     private readonly FileFinder $fileFinder;
+    private array $env;
 
     public function __construct(
         private readonly EnvValueReplacer $envValueReplacer,
         private readonly CacheManager     $cacheManager,
     )
     {
-        [$this->values, $env] = $this->cacheManager->get()->get(
+        [$this->values, $this->env] = $this->cacheManager->get()->get(
             self::CACHE_KEY,
             fn() => $this->initializeValues()
         );
-
-        $this->envValueReplacer->setEnv($env);
 
         $this->fileFinder = new FileFinder();
     }
@@ -65,7 +64,7 @@ class ConfigManager implements IntConfigManager
         try {
             $dotEnv->load();
 
-            $this->envValueReplacer->setEnv($_ENV);
+            $this->env = $_ENV;
         }
 
         /** @noinspection PhpRedundantCatchClauseInspection */
@@ -123,7 +122,7 @@ class ConfigManager implements IntConfigManager
     {
         $value = $this->values->get($path);
 
-        return is_string($value) ? $this->envValueReplacer->process($value) : $value;
+        return is_string($value) ? $this->envValueReplacer->process($value, $this->env) : $value;
     }
 
     public function setValue(string $path, mixed $value): void
