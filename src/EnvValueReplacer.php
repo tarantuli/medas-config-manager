@@ -9,7 +9,7 @@ use Medas\Core\Attributes\Service;
 #[Service]
 readonly class EnvValueReplacer
 {
-    public function process(string $value, array $env): string|null
+    public function process(string $value, array $env): mixed
     {
         if (preg_match('/^\$env\((\w+)\)$/', $value, $match)) {
             // If the string as a whole refers to one ENV variable, and that one isn't set,
