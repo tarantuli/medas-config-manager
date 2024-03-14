@@ -14,16 +14,10 @@ class ConfigManager implements IntConfigManager
 {
     private const CACHE_KEY = 'ConfigManager::valuesAndEnv';
 
-    /** @var string[] $directories */
-    private array $directories = [];
-
-    /** @var string[] $files */
-    private array $files = [];
-
+    private bool $valuesWereAlreadyCached = true;
     private readonly DataTree $values;
-    private bool $valuesWereCached = true;
-    private readonly FileFinder $fileFinder;
     private array $env;
+    private readonly FileFinder $fileFinder;
 
     public function __construct(
         private readonly EnvValueReplacer $envValueReplacer,
@@ -40,14 +34,14 @@ class ConfigManager implements IntConfigManager
 
     private function initializeValues(): array
     {
-        $this->valuesWereCached = false;
+        $this->valuesWereAlreadyCached = false;
 
         return [new DataTree(), $_ENV];
     }
 
     public function __destruct()
     {
-        if (!$this->valuesWereCached) {
+        if (!$this->valuesWereAlreadyCached) {
             // Explicitly set the current values
             $this->cacheManager->get()->set(self::CACHE_KEY, [$this->values, $_ENV]);
         }
@@ -55,7 +49,7 @@ class ConfigManager implements IntConfigManager
 
     public function readEnv(string $filePath, string $name = null): self
     {
-        if ($this->valuesWereCached) {
+        if ($this->valuesWereAlreadyCached) {
             return $this;
         }
 
@@ -77,15 +71,13 @@ class ConfigManager implements IntConfigManager
 
     public function addDirectory(string $directory): self
     {
-        if ($this->valuesWereCached) {
+        if ($this->valuesWereAlreadyCached) {
             return $this;
         }
 
         if (!file_exists($directory)) {
             throw new \Exception('directory ' . $directory . ' not found');
         }
-
-        $this->directories[] = $directory;
 
         $this->loadConfigFiles($directory);
 
@@ -97,20 +89,8 @@ class ConfigManager implements IntConfigManager
         $files = $this->fileFinder->recursiveFindByExtension($directory, 'yaml');
 
         foreach ($files as $file) {
-            $this->files[] = $file;
-
             $this->values->mergeArray(Yaml::parseFile($file) ?? [], $file);
         }
-    }
-
-    public function getDirectories(): array
-    {
-        return $this->directories;
-    }
-
-    public function getFiles(): array
-    {
-        return $this->files;
     }
 
     public function hasValue(string $path): bool
