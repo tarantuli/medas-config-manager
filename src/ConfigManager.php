@@ -61,8 +61,7 @@ class ConfigManager implements IntConfigManager
             $this->env = $_ENV;
         }
 
-        /** @noinspection PhpRedundantCatchClauseInspection */
-        catch (\ErrorException $e) {
+        catch (\InvalidArgumentException $e) {
             throw new \Exception($e->getMessage());
         }
 
