@@ -6,7 +6,7 @@ namespace Medas\ConfigManager;
 
 use Dotenv\Dotenv;
 use Medas\Core\{Attributes\Service, Interfaces\ConfigManager as IntConfigManager};
-use Medas\ServiceManager\{Cache\CacheManager, DataTree\DataTree, Mapping\FileFinder};
+use Medas\ServiceManager\{DataTree\DataTree, Mapping\FileFinder};
 use Symfony\Component\Yaml\Yaml;
 
 #[Service]
@@ -21,14 +21,9 @@ class ConfigManager implements IntConfigManager
 
     public function __construct(
         private readonly EnvValueReplacer $envValueReplacer,
-        private readonly CacheManager     $cacheManager,
     )
     {
-        [$this->values, $this->env] = $this->cacheManager->get()->get(
-            self::CACHE_KEY,
-            fn() => $this->initializeValues()
-        );
-
+        [$this->values, $this->env] = cache(self::CACHE_KEY, fn() => $this->initializeValues());
         $this->fileFinder = new FileFinder();
     }
 
@@ -43,7 +38,7 @@ class ConfigManager implements IntConfigManager
     {
         if (!$this->valuesWereAlreadyCached) {
             // Explicitly set the current values
-            $this->cacheManager->get()->set(self::CACHE_KEY, [$this->values, $_ENV]);
+            cacheSet(self::CACHE_KEY, [$this->values, $_ENV]);
         }
     }
 
@@ -60,7 +55,6 @@ class ConfigManager implements IntConfigManager
 
             $this->env = $_ENV;
         }
-
         catch (\InvalidArgumentException $e) {
             throw new \Exception($e->getMessage());
         }
