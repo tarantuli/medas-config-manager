@@ -16,7 +16,7 @@
     "require": {
         "morphp/medas-core": "dev-dev",
         "morphp/medas-service-manager": "dev-dev",
-        "symfony/yaml": "~5.3",
+        "symfony/yaml": "^7.3",
         "vlucas/phpdotenv": "^5.3"
     },
     "require-dev": {
