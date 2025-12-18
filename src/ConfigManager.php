@@ -42,7 +42,7 @@ class ConfigManager implements IntConfigManager
         }
     }
 
-    public function readEnv(string $filePath, ?string $name = null): self
+    public function readEnv(string $filePath, string|null $name = null): self
     {
         if ($this->valuesWereAlreadyCached) {
             return $this;
