@@ -13,8 +13,9 @@
   ],
   "type": "library",
   "require": {
-    "morphp/medas-core": "^2",
-    "morphp/medas-service-manager": "^2",
+    "morphp/medas-core": "^1",
+    "morphp/medas-service-manager": "^1",
+    "php": "^8.2",
     "symfony/yaml": "^7.3",
     "vlucas/phpdotenv": "^5.3"
   },
