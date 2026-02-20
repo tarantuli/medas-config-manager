@@ -21,10 +21,11 @@ class ConfigManager implements IntConfigManager
 
     public function __construct(
         private readonly EnvValueReplacer $envValueReplacer,
+        FileFinder                        $fileFinder = new FileFinder()
     )
     {
         [$this->values, $this->env] = cache(self::CACHE_KEY, fn() => $this->initializeValues());
-        $this->fileFinder = new FileFinder();
+        $this->fileFinder = $fileFinder;
     }
 
     private function initializeValues(): array
@@ -56,7 +57,7 @@ class ConfigManager implements IntConfigManager
             $this->env = $_ENV;
         }
         catch (\InvalidArgumentException $e) {
-            throw new \Exception($e->getMessage());
+            throw new \InvalidArgumentException($e->getMessage(), previous: $e);
         }
 
         return $this;
@@ -69,7 +70,7 @@ class ConfigManager implements IntConfigManager
         }
 
         if (!file_exists($directory)) {
-            throw new \Exception('directory ' . $directory . ' not found');
+            throw new \InvalidArgumentException(sprintf('Directory "%s" not found.', $directory));
         }
 
         $this->loadConfigFiles($directory);

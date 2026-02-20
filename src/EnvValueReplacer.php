@@ -20,7 +20,21 @@ readonly class EnvValueReplacer
         if (preg_match('/^\$envJson\((\w+)\)$/', $value, $match)) {
             // If the string as a whole refers to one ENV variable, and that one isn't set,
             // return null
-            return array_key_exists($match[1], $env) ? json_decode($env[$match[1]]) : null;
+            if (!array_key_exists($match[1], $env)) {
+                return null;
+            }
+
+            $decoded = json_decode($env[$match[1]]);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \UnexpectedValueException(sprintf(
+                    'Failed to decode JSON for env variable "%s": %s',
+                    $match[1],
+                    json_last_error_msg(),
+                ));
+            }
+
+            return $decoded;
         }
 
         if (preg_match_all('/\$env\((\w+)\)/', $value, $matches, PREG_SET_ORDER)) {
