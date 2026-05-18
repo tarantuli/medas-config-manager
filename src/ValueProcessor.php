@@ -21,7 +21,7 @@ readonly class ValueProcessor
             $value = $this->envValueReplacer->process($value, $env);
         }
 
-        if (str_contains($value, '::')) {
+        if (is_string($value) && str_contains($value, '::')) {
             [$className, $caseName] = explode('::', $value, 2);
 
             if (enum_exists($className)) {
