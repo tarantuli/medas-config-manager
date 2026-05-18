@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use Medas\ConfigManager\ConfigManager;
-use Medas\ConfigManager\ConfigManagerPackage;
-use Medas\ServiceManager\ServiceConfig;
-use Medas\ServiceManager\ServiceManager;
+use Medas\ConfigManager\{ConfigManager, ConfigManagerPackage};
+use Medas\ObjectInstantiator\ObjectInstantiator;
+use Medas\ServiceManager\{ServiceConfig, ServiceManager};
 
 new ServiceManager(function (): ServiceConfig {
-    $config = new ServiceConfig();
+    $config = new ServiceConfig(ObjectInstantiator::class);
+
     $config->addPackages([
         ConfigManagerPackage::instance(),
     ]);
@@ -17,5 +17,5 @@ new ServiceManager(function (): ServiceConfig {
 });
 
 service(ConfigManager::class)
-    ->readEnv(__DIR__)
+    ->readEnv(__DIR__ . '/tests')
     ->addDirectory(realpath(__DIR__ . '/tests/MockConfig'));

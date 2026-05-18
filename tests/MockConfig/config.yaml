@@ -3,6 +3,8 @@ path:
     string-variable: string
     quoted-variable: "quoted"
     int-variable: 12
+    enum-variable: \Medas\ConfigManagerTest\ExampleEnum::Value1
+    max-int-variable: PHP_INT_MAX
 
 mock-root:
   mock-group:

@@ -20,8 +20,8 @@ class ConfigManager implements IntConfigManager
     private readonly FileFinder $fileFinder;
 
     public function __construct(
-        private readonly EnvValueReplacer $envValueReplacer,
-        FileFinder                        $fileFinder = new FileFinder()
+        private readonly ValueProcessor $valueProcessor,
+        FileFinder                      $fileFinder = new FileFinder()
     )
     {
         [$this->values, $this->env] = cache(self::CACHE_KEY, fn() => $this->initializeValues());
@@ -96,7 +96,7 @@ class ConfigManager implements IntConfigManager
     {
         $value = $this->values->get($path);
 
-        return is_string($value) ? $this->envValueReplacer->process($value, $this->env) : $value;
+        return $this->valueProcessor->process($value, $this->env);
     }
 
     public function setValue(string $path, mixed $value): void

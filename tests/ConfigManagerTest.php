@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test;
+namespace Medas\ConfigManagerTest;
 
 use Medas\ConfigManager\ConfigManager;
 use PHPUnit\Framework\TestCase;
@@ -15,18 +15,19 @@ class ConfigManagerTest extends TestCase
 
         $this->assertEquals('string', $config->getValue('path.to.string-variable'));
         $this->assertEquals('quoted', $config->getValue('path.to.quoted-variable'));
-
-        $this->assertEquals('int', get_debug_type($config->getValue('path.to.int-variable')));
-    }
-
-    private function getConfig(): ConfigManager
-    {
-        return service(ConfigManager::class);
+        $this->assertEquals(ExampleEnum::Value1, $config->getValue('path.to.enum-variable'));
+        $this->assertEquals(PHP_INT_MAX, $config->getValue('path.to.max-int-variable'));
     }
 
     public function testInsertEnvValues(): void
     {
         $config = $this->getConfig();
-        self::assertEquals($_ENV['DB_DNS'], $config->getValue('db.dns'));
+
+        self::assertEquals('127.0.0.1', $config->getValue('db.dsn'));
+    }
+
+    private function getConfig(): ConfigManager
+    {
+        return service(ConfigManager::class);
     }
 }
