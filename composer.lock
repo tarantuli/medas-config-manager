@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc2dae182b99978e0b41574543b9611d",
+    "content-hash": "eaaeabde201f84c47cfecf2dcdf0b7b4",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -119,16 +119,16 @@
         },
         {
             "name": "morphp/medas-core",
-            "version": "v3.5.1",
+            "version": "v3.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-core.git",
-                "reference": "4874315aee48c17f8e52e68977cfde00f04fd8b0"
+                "reference": "4507573da8ad1d8d51db41d92e2cee6b7108f14b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/4874315aee48c17f8e52e68977cfde00f04fd8b0",
-                "reference": "4874315aee48c17f8e52e68977cfde00f04fd8b0",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/4507573da8ad1d8d51db41d92e2cee6b7108f14b",
+                "reference": "4507573da8ad1d8d51db41d92e2cee6b7108f14b",
                 "shasum": ""
             },
             "require": {
@@ -161,10 +161,10 @@
                 "medas"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-core/tree/v3.5.1",
+                "source": "https://github.com/tarantuli/medas-core/tree/v3.6.1",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2026-05-13T09:40:02+00:00"
+            "time": "2026-05-19T10:28:51+00:00"
         },
         {
             "name": "morphp/medas-service-manager",
