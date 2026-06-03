@@ -115,11 +115,11 @@ max_items: PHP_INT_MAX
 **Creating a secret and appending it to `.env`:**
 
 ```bash
-php bin/console config-manager:create-env-secret APP_SECRET
+php bin/medas config-manager:create-env-secret APP_SECRET
 # Appends APP_SECRET=<random 32-char alphanumeric string> to .env
 
 # Custom length and target file
-php bin/console config-manager:create-env-secret JWT_SECRET --length=64 --file=.env.production
+php bin/medas config-manager:create-env-secret JWT_SECRET --length=64 --file=.env.production
 ```
 
 The secret is generated with `CodeGenerator` using an alphanumeric character set. If the variable name already exists in the target file, the command throws an error rather than overwriting it.
