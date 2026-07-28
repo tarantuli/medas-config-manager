@@ -5,7 +5,13 @@ declare(strict_types=1);
 namespace Medas\ConfigManager\ConsoleCommands;
 
 use Medas\ConfigManager\Exceptions\{InvalidSecretName, SecretAlreadyExistsInEnvFile};
-use Medas\Console\Commands\{BaseConsoleCommand, CommandInput, ConsoleCommandGroup, Option, Range};
+use Medas\Console\Commands\{
+    Argument,
+    BaseConsoleCommand,
+    CommandInput,
+    ConsoleCommandGroup,
+    Option
+};
 use Medas\Core\{
     Attributes\Service,
     CodeGenerator,
@@ -46,16 +52,18 @@ readonly class CreateEnvSecret extends BaseConsoleCommand
         ];
     }
 
-    public function allowedArgumentCount(): Range
+    public function arguments(): array
     {
-        return new Range(1);
+        return [
+            Argument::required('name', description: 'The name of the secret to create'),
+        ];
     }
 
     public function process(CommandInput $input): void
     {
         $file = $input->getOption('file') ?? '.env';
         $length = (int) ($input->getOption('length') ?? 32);
-        $name = $input->getArgument(1);
+        $name = $input->getArgument('name');
 
         if (!preg_match('/^[a-zA-Z0-9_]+$/', $name)) {
             throw new InvalidSecretName($name);
