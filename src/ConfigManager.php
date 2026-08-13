@@ -25,6 +25,11 @@ class ConfigManager implements IntConfigManager
     )
     {
         [$this->values, $this->env] = cache(self::CACHE_KEY, fn() => $this->initializeValues());
+
+        // On a cache hit readEnv() is skipped, so Dotenv never repopulates the $_ENV superglobal.
+        // Resolvers such as EnvValueResolver read $_ENV directly, so restore the cached env into it.
+        // '+=' keeps any real environment values already present (matches Dotenv-immutable semantics).
+        $_ENV += $this->env;
         $this->fileFinder = $fileFinder;
     }
 
