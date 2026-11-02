@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace Medas\ConfigManager;
 
 use Dotenv\Dotenv;
-use Medas\Core\{Attributes\Service, Interfaces\ConfigManager as IntConfigManager};
+use Medas\Core\{
+    Attributes\Service,
+    Interfaces\CacheManager,
+    Interfaces\ConfigManager as IntConfigManager
+};
 use Medas\ServiceManager\{DataTree\DataTree, Mapping\FileFinder};
 use Symfony\Component\Yaml\Yaml;
 
@@ -24,20 +28,43 @@ class ConfigManager implements IntConfigManager
         FileFinder                      $fileFinder = new FileFinder()
     )
     {
-        [$this->values, $this->env] = cache(self::CACHE_KEY, fn() => $this->initializeValues());
+        $this->fileFinder = $fileFinder;
+        $cached = $this->cachedValuesAndEnv();
+
+        if ($cached === null) {
+            // Nothing is cached until the configuration is complete, in __destruct(): concurrent requests would
+            // otherwise take a placeholder from the cache for a configuration without any values or env
+            $this->valuesWereAlreadyCached = false;
+            $this->values = new DataTree();
+            $this->env = $_ENV;
+
+            return;
+        }
+
+        [$this->values, $this->env] = $cached;
 
         // On a cache hit readEnv() is skipped, so Dotenv never repopulates the $_ENV superglobal.
         // Resolvers such as EnvValueResolver read $_ENV directly, so restore the cached env into it.
         // '+=' keeps any real environment values already present (matches Dotenv-immutable semantics).
         $_ENV += $this->env;
-        $this->fileFinder = $fileFinder;
     }
 
-    private function initializeValues(): array
+    /**
+     * @return array{DataTree, array}|null
+     */
+    private function cachedValuesAndEnv(): array|null
     {
-        $this->valuesWereAlreadyCached = false;
+        $cache = service(CacheManager::class)->get();
 
-        return [new DataTree(), $_ENV];
+        if (!$cache->contains(self::CACHE_KEY)) {
+            return null;
+        }
+
+        // Cache::get() stores what its getter returns, so it's only called for an entry that exists; should the
+        // entry disappear in between, the null it stores counts as a miss here and is overwritten in __destruct()
+        $cached = $cache->get(self::CACHE_KEY, static fn() => null);
+
+        return is_array($cached) ? $cached : null;
     }
 
     public function __destruct()
